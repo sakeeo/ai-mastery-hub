@@ -1,6 +1,6 @@
 # Rules Web Design Anti-AI
 
-**Versi 1.0** · Turunan riset ciri-ciri web design buatan AI (taxonomy 27 tells, 3,2 juta post Reddit, validasi 202 situs).
+**Versi 1.0** · Turunan riset ciri-ciri web design buatan AI (taxonomy 27 tells, 3,2 juta post Reddit, validasi 202 situs). Asal setiap angka ada di [sumber.md](sumber.md).
 
 **Cara pakai:**
 - **Manusia** → ini spec desain. Baca §0 dan §13 dulu, sisanya referensi.

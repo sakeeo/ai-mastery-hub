@@ -1,6 +1,6 @@
 # Rules Copywriting Anti-AI
 
-**Versi 1.0** · Turunan riset ciri-ciri copywriting AI (korpus PubMed 14,4 juta abstrak, 89.239 post Reddit, studi The Economist 2026, library pola Bahasa Indonesia).
+**Versi 1.0** · Turunan riset ciri-ciri copywriting AI (korpus PubMed 14,4 juta abstrak, 89.239 post Reddit, studi The Economist 2026, library pola Bahasa Indonesia). Asal setiap angka ada di [sumber.md](sumber.md).
 
 **Cara pakai:**
 - **Penulis** → §0 dan §10 dulu, sisanya referensi.
@@ -104,7 +104,7 @@
 
 **M1 — Prosa untuk hal yang memang prosa.** Bullet hanya untuk daftar yang benar-benar list-like. Argumen, penjelasan, dan cerita ditulis sebagai paragraf.
 
-**M2 — Larang bold lead-in bullet.** `**Kecepatan:** sistem memproses…` adalah pola format paling khas output LLM. Tulis kalimat biasa.
+**M2 — Larang bold lead-in bullet.** `**Kecepatan:** sistem memproses…` adalah pola format paling khas output LLM. Di bullet, tulis kalimat biasa. Di prosa, tebal masih boleh untuk menamai istilah, asalkan tidak setiap paragraf dibuka label tebal: kalau begitu, ritmenya berubah jadi daftar yang menyamar sebagai prosa.
 
 **M3 — Sentence case untuk heading.** Title Case di heading adalah konvensi yang menandai teks generated, bukan pilihan gaya.
 

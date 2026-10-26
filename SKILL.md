@@ -26,7 +26,7 @@ Jangan pakai untuk aplikasi internal padat (tabel data, dashboard admin 14px) at
 
 **Default adalah ketiadaan keputusan.** Bukan jelek, hanya tidak dipilih. Setiap elemen dan setiap kalimat harus punya alasan yang bisa diucapkan. Kalau alasannya "biasanya begitu", itu bukan alasan.
 
-**Satu ciri bukan bukti.** Ungu dipakai sepertiga situs top. Inter dengan type system yang benar dipakai seperempatnya. Em dash yang dipakai sesekali adalah tanda penulis yang peduli tanda baca. Yang jadi bukti adalah bundel default yang tidak punya satu pun keputusan pengompensasi.
+**Satu ciri bukan bukti.** Ungu dipakai sepertiga situs top. Inter dengan type system yang benar dipakai seperempatnya. Dua angka itu dari studi 202 situs yang dirujuk di [`references/sumber.md`](references/sumber.md). Em dash yang dipakai sesekali adalah tanda penulis yang peduli tanda baca. Yang jadi bukti adalah bundel default yang tidak punya satu pun keputusan pengompensasi.
 
 **Overcorrection juga default.** Menghindari indigo lalu pindah ke krem + rust + serif italic bukan keluar dari mesin, itu default gelombang kedua. Menghindari teks kaku lalu menulis slang dan typo sengaja bukan terdengar manusia, itu tell baru. Setiap nilai harus bisa dilacak ke brand, bukan ke reaksi terhadap tren.
 
@@ -170,5 +170,6 @@ Baca sesuai kebutuhan, bukan sekaligus.
 |---|---|
 | [`references/web-design.md`](references/web-design.md) | Aturan lengkap desain: fondasi token, warna, tipografi, layout, radius/elevasi, spacing, state, motion, gambar, kode. Termasuk gate skor 12 baris dan prompt block desain. |
 | [`references/copywriting.md`](references/copywriting.md) | Aturan lengkap copy: fondasi, diksi, sintaks dan ritme, struktur, format, bukti, khusus copywriting, pola Bahasa Indonesia. Termasuk gate skor 14 baris dan prompt block copy. |
+| [`references/sumber.md`](references/sumber.md) | Asal setiap angka yang dipakai di repo ini, beserta ambang mana yang cuma heuristik dan bukan hasil pengukuran. |
 
 Kalau dua referensi bertentangan, aturan yang lebih spesifik untuk konteksnya menang, dan pengecualiannya dicatat di file brand. Kalau aturan menghalangi keputusan yang lebih baik dan bisa dipertahankan, tulis alasannya, jangan melanggarnya diam-diam.
