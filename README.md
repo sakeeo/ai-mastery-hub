@@ -14,7 +14,8 @@ Setiap aturan di sini menuntut satu hal yang sama: elemen atau kalimat harus pun
 
 ```
 SKILL.md                  Alur kerja gabungan, daftar terlarang, gate cepat, prompt block
-install.ps1               Pemasang ke direktori skill DSH (user atau per project)
+install.ps1               Pemasang untuk Windows (user atau per project)
+install.sh                Pemasang untuk macOS dan Linux
 references/web-design.md  Aturan desain lengkap + gate skor 12 baris
 references/copywriting.md Aturan copy lengkap + gate skor 14 baris
 references/sumber.md      Asal setiap angka yang dipakai di repo ini
@@ -24,7 +25,7 @@ references/sumber.md      Asal setiap angka yang dipakai di repo ini
 
 ## Cara pakai
 
-**Sebagai skill agent.** Jalankan `.\install.ps1` untuk memasang ke `~/.dsh/skills`, yang berlaku di semua project di mesin Anda. Untuk satu project saja, pakai `.\install.ps1 -Project -Path <folder>`, yang menulis ke `<folder>\.dsh\skills`. Keduanya menyalin `SKILL.md` beserta `references/`, lalu memeriksa hash setiap berkas setelah menyalin. Untuk agent lain, letakkan folder ini di direktori skill-nya; strukturnya mengikuti konvensi `SKILL.md` dengan frontmatter `name` dan `description` yang umum dipakai Claude Code, DSH, dan agent lain yang mendukung skill berbasis folder.
+**Sebagai skill agent.** Jalankan `.\install.ps1` untuk memasang ke `~/.dsh/skills`, yang berlaku di semua project di mesin Anda. Untuk satu project saja, pakai `.\install.ps1 -Project -Path <folder>`, yang menulis ke `<folder>\.dsh\skills`. Di macOS dan Linux, `./install.sh` melakukan hal yang sama dengan opsi `--project` dan `--path`. Kedua skrip menyalin `SKILL.md` beserta `references/`, lalu memeriksa hash setiap berkas setelah menyalin. Untuk agent lain, letakkan folder ini di direktori skill-nya; strukturnya mengikuti konvensi `SKILL.md` dengan frontmatter `name` dan `description` yang umum dipakai Claude Code, DSH, dan agent lain yang mendukung skill berbasis folder.
 
 **Sebagai aturan proyek.** Ambil blok di bagian "Prompt block" pada `SKILL.md` dan tempel apa adanya ke `CLAUDE.md`, `.cursorrules`, atau custom instructions. Blok itu merangkum larangan dan angka wajib yang paling sering dilanggar.
 

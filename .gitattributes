@@ -1,0 +1,7 @@
+# Baris baru yang konsisten lintas mesin.
+# Skrip shell wajib LF: shebang dengan CRLF gagal dieksekusi di Unix.
+* text=auto
+.gitattributes text eol=lf
+*.md  text eol=lf
+*.sh  text eol=lf
+*.ps1 text eol=crlf
