@@ -25,21 +25,33 @@ references/sumber.md      Asal setiap angka yang dipakai di repo ini
 
 ## Cara pakai
 
-**Sebagai skill agent.** Jalankan `.\install.ps1` untuk memasang ke `~/.dsh/skills`, yang berlaku di semua project di mesin Anda. Untuk satu project saja, pakai `.\install.ps1 -Project -Path <folder>`, yang menulis ke `<folder>\.dsh\skills`. Di macOS dan Linux, `./install.sh` melakukan hal yang sama dengan opsi `--project` dan `--path`. Kedua skrip menyalin `SKILL.md` beserta `references/`, lalu memeriksa hash setiap berkas setelah menyalin. Untuk agent lain, letakkan folder ini di direktori skill-nya; strukturnya mengikuti konvensi `SKILL.md` dengan frontmatter `name` dan `description` yang umum dipakai Claude Code, DSH, dan agent lain yang mendukung skill berbasis folder.
+**Sebagai skill agent.** Jalankan `.\install.ps1` untuk memasang ke `~/.dsh/skills`, yang berlaku di semua project di mesin Anda. Tambahkan `-Claude` untuk Claude Code (`~/.claude/skills`) atau `-Agents` untuk Codex CLI (`~/.agents/skills`). Untuk satu project saja, tambahkan `-Project -Path <folder>`. Di macOS dan Linux, `./install.sh` melakukan hal yang sama dengan opsi `--claude`, `--agents`, `--project`, dan `--path`. Kedua skrip menyalin `SKILL.md` beserta `references/`, lalu memeriksa hash setiap berkas setelah menyalin. Untuk agent lain, letakkan folder ini di direktori skill-nya; isinya mengikuti standar [Agent Skills](https://agentskills.io) dengan frontmatter `name` dan `description` saja, tanpa fitur khusus harness mana pun.
 
 **Sebagai aturan proyek.** Ambil blok di bagian "Prompt block" pada `SKILL.md` dan tempel apa adanya ke `CLAUDE.md`, `.cursorrules`, atau custom instructions. Blok itu merangkum larangan dan angka wajib yang paling sering dilanggar.
 
 **Sebagai spesifikasi manusia.** Baca `SKILL.md` sampai bagian audit, lalu buka referensi saat butuh angka spesifik: skala tipe, kontras, durasi motion, batas hedge, atau pola kalimat Indonesia.
 
+## Kompatibilitas harness
+
+Skill ini memakai standar [Agent Skills](https://agentskills.io): sebuah folder dengan `SKILL.md` berfrontmatter `name` dan `description`. Tidak ada `allowed-tools`, `context: fork`, atau injeksi perintah yang cuma dipahami satu harness.
+
+| Harness | Folder yang dibaca | Pasang dengan |
+|---|---|---|
+| DSH | `~/.dsh/skills/<nama>/`, `<repo>/.dsh/skills/`, juga `~/.agents/skills/` | `.\install.ps1` atau `./install.sh` |
+| Claude Code | `~/.claude/skills/<nama>/`, `<repo>/.claude/skills/` | `-Claude` atau `--claude` |
+| Codex CLI | `~/.agents/skills/<nama>/`, `<repo>/.agents/skills/` | `-Agents` atau `--agents` |
+
+Codex membaca `.agents/skills`, bukan `.codex/skills`. Karena DSH juga membaca `~/.agents/skills`, satu pemasangan di sana melayani DSH dan Codex sekaligus, dengan catatan bahwa skill akan muncul dari dua lokasi kalau Anda juga memasangnya di `~/.dsh/skills`.
+
 ## Dua hal yang sering disalahpahami
 
 **Satu ciri bukan bukti.** Ungu dipakai sepertiga situs top. Inter dengan type system yang benar dipakai seperempatnya. Dua angka itu diukur pada 202 situs top, rinciannya di [references/sumber.md](references/sumber.md). Em dash yang dipakai sesekali adalah tanda penulis yang peduli tanda baca. Yang jadi bukti adalah bundel default tanpa satu pun keputusan pengompensasi.
 
+**Aturan ini lantai, bukan plafon.** Kalau sebuah aturan menghalangi keputusan yang lebih baik dan bisa dipertahankan, tulis pengecualiannya di file brand. Jangan melanggarnya diam-diam, dan jangan memakainya untuk menuduh penulis non-native atau proyek yang memang memilih gaya umum.
+
 ## Pengecualian yang dicatat
 
 H1 di README ini memakai Title Case karena itu nama proyek di GitHub, bukan heading di dalam dokumen. Aturan sentence case tetap berlaku untuk heading lain.
-
-**Aturan ini lantai, bukan plafon.** Kalau sebuah aturan menghalangi keputusan yang lebih baik dan bisa dipertahankan, tulis pengecualiannya di file brand. Jangan melanggarnya diam-diam, dan jangan memakainya untuk menuduh penulis non-native atau proyek yang memang memilih gaya umum.
 
 ## Skor
 

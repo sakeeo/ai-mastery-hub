@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
-# Memasang skill web-design-anti-ai ke direktori skill DeepSeek Harness.
+# Memasang skill web-design-anti-ai ke direktori skill agent.
 #
-# Default: ~/.dsh/skills/web-design-anti-ai (berlaku di semua project).
-# Dengan --project: <folder>/.dsh/skills/web-design-anti-ai.
+# Target default DSH (~/.dsh/skills). Pakai --claude untuk Claude Code
+# (~/.claude/skills), atau --agents untuk Codex CLI dan agent lain yang
+# membaca standar .agents/skills.
 #
 # Folder ref/ tidak pernah disalin.
 
@@ -10,20 +11,26 @@ set -euo pipefail
 
 NAME="web-design-anti-ai"
 PROJECT=0
+TARGET="dsh"
 PROJECT_PATH=""
 
 usage() {
     cat <<'EOF'
 Pemakaian: ./install.sh [opsi]
 
-  -p, --project      Pasang ke <folder>/.dsh/skills, bukan direktori user
+  -p, --project      Pasang ke dalam project, bukan direktori user
       --path DIR     Root project tujuan saat memakai --project (default: direktori ini)
+      --claude       Target Claude Code (~/.claude/skills)
+      --agents       Target Codex CLI dan agent lain yang membaca ~/.agents/skills
   -n, --name NAME    Nama folder skill tujuan (default: web-design-anti-ai)
   -h, --help         Tampilkan bantuan ini
 
+Target default adalah DSH (~/.dsh/skills).
+
 Contoh:
   ./install.sh
-  ./install.sh --project --path ~/kerja/landing-page
+  ./install.sh --claude
+  ./install.sh --agents --project --path ~/kerja/landing-page
 EOF
 }
 
@@ -33,6 +40,12 @@ while [ $# -gt 0 ]; do
         --path|--project-path)
             [ $# -ge 2 ] || { echo "opsi $1 butuh argumen" >&2; exit 2; }
             PROJECT_PATH="$2"; shift 2 ;;
+        --claude)
+            [ "$TARGET" = "dsh" ] || { echo "pilih salah satu: --claude atau --agents" >&2; exit 2; }
+            TARGET="claude"; shift ;;
+        --agents)
+            [ "$TARGET" = "dsh" ] || { echo "pilih salah satu: --claude atau --agents" >&2; exit 2; }
+            TARGET="agents"; shift ;;
         -n|--name)
             [ $# -ge 2 ] || { echo "opsi $1 butuh argumen" >&2; exit 2; }
             NAME="$2"; shift 2 ;;
@@ -41,12 +54,23 @@ while [ $# -gt 0 ]; do
     esac
 done
 
+if [ -n "$PROJECT_PATH" ] && [ "$PROJECT" -ne 1 ]; then
+    echo "--path hanya dipakai bersama --project" >&2
+    exit 2
+fi
+
 SRC_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 if [ ! -f "$SRC_DIR/SKILL.md" ]; then
     echo "SKILL.md tidak ditemukan di $SRC_DIR. Jalankan skrip ini dari folder repo skill." >&2
     exit 1
 fi
+
+case "$TARGET" in
+    claude) CONTAINER=".claude" ;;
+    agents) CONTAINER=".agents" ;;
+    *)      CONTAINER=".dsh" ;;
+esac
 
 if [ "$PROJECT" -eq 1 ]; then
     root="${PROJECT_PATH:-$PWD}"
@@ -55,21 +79,27 @@ if [ "$PROJECT" -eq 1 ]; then
         exit 1
     fi
     root="$(cd "$root" && pwd)"
-    DEST="$root/.dsh/skills/$NAME"
-    SCOPE="project ($root)"
+    DEST="$root/$CONTAINER/skills/$NAME"
+    SCOPE="project $TARGET ($root)"
 else
-    DSH_ROOT="${DSH_HOME:-$HOME/.dsh}"
-    # DSH_HOME kadang berisi path gaya Windows (C:\Users\...). Di Git Bash,
-    # ubah ke bentuk /c/Users/... supaya mkdir, cp, dan hash konsisten.
-    case "$DSH_ROOT" in
-        [A-Za-z]:[\\/]*)
-            if command -v cygpath >/dev/null 2>&1; then
-                DSH_ROOT="$(cygpath -u "$DSH_ROOT")"
-            fi
+    case "$TARGET" in
+        claude) BASE="$HOME/.claude" ;;
+        agents) BASE="$HOME/.agents" ;;
+        *)
+            BASE="${DSH_HOME:-$HOME/.dsh}"
+            # DSH_HOME kadang berisi path gaya Windows (C:\Users\...). Di Git Bash,
+            # ubah ke bentuk /c/Users/... supaya mkdir, cp, dan hash konsisten.
+            case "$BASE" in
+                [A-Za-z]:[\\/]*)
+                    if command -v cygpath >/dev/null 2>&1; then
+                        BASE="$(cygpath -u "$BASE")"
+                    fi
+                    ;;
+            esac
             ;;
     esac
-    DEST="$DSH_ROOT/skills/$NAME"
-    SCOPE="user"
+    DEST="$BASE/skills/$NAME"
+    SCOPE="user $TARGET"
 fi
 
 files=(SKILL.md README.md LICENSE)

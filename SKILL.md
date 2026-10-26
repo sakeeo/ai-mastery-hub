@@ -7,7 +7,8 @@ description: >-
   kalimat, struktur, format, bukti, dan pola Bahasa Indonesia. Pakai saat membangun
   atau mengaudit landing page, pricing page, portofolio, hero section, atau saat
   menulis headline, subhead, CTA, dan microcopy untuk web. Terutama kalau hasilnya
-  terasa generic, template, atau seperti hasil mesin.
+  terasa generic, template, atau seperti hasil mesin. Jangan pakai untuk dashboard
+  internal yang padat data, aplikasi admin, atau dokumen legal.
 ---
 
 # Web Design & Copywriting Anti-AI
