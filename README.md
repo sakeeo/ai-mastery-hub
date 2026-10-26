@@ -37,3 +37,8 @@ references/copywriting.md Aturan copy lengkap + gate skor 14 baris
 ## Skor
 
 Audit memakai skor 0–2 per baris, makin rendah makin baik. Lulus jika desain ≤ 6 dari 24, copy ≤ 8 dari 28, dan nol pelanggaran daftar terlarang. Alat ini untuk diagnosis, bukan bukti.
+
+## Lisensi
+
+MIT. Pakai bebas untuk proyek pribadi maupun komersial: ubah, gabungkan ke aturan sendiri, sebarkan, atau jual. Satu syaratnya hanya menyertakan notice hak cipta yang ada di [LICENSE](LICENSE).
+
