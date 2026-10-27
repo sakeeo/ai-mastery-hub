@@ -1,39 +1,73 @@
-# Web Design & Copywriting Anti-AI
+# AI mastery hub
 
-Skill untuk membangun halaman web yang tidak terbaca sebagai hasil mesin: landing page, pricing, portofolio, hero section, beserta headline dan CTA-nya.
+Kumpulan skill [Agent Skills](https://agentskills.io) untuk membangun halaman web: desain antarmuka, copywriting, dan SEO on-page. Setiap skill berdiri sendiri: folder sendiri, `SKILL.md` sendiri, referensi sendiri. Pemasang di akar repo membaca semua folder di `skills/`, lalu memasang satu atau semuanya ke direktori yang dibaca agent.
 
-Isinya dua set aturan yang digabung jadi satu alur kerja. Satu untuk desain (warna, tipografi, layout, radius dan elevasi, spacing, state, motion, gambar, kode, aksesibilitas). Satu untuk copy (diksi, ritme kalimat, struktur, format, bukti, pola Bahasa Indonesia).
+## Daftar skill
 
-## Masalah yang disasar
+| Skill | Dipakai untuk | Isi |
+|---|---|---|
+| [`web-design-anti-ai`](skills/web-design-anti-ai/) | Warna, tipografi, layout, radius, spacing, state, motion, gambar, kode, aksesibilitas | `SKILL.md`, dua referensi, README |
+| [`copywriting-anti-ai`](skills/copywriting-anti-ai/) | Headline, subhead, CTA, microcopy, bukti, pola Bahasa Indonesia | `SKILL.md`, dua referensi, README |
+| [`seo-onpage`](skills/seo-onpage/) | Keyword, title, meta description, slug, heading, alt, internal link, checklist publish | `SKILL.md`, dua referensi, README |
 
-Situs terasa "AI" jarang karena jelek. Penyebabnya lebih membosankan: setiap pilihan diambil dari nilai paling umum, mulai dari indigo sebagai aksen, Inter tanpa skala, hero center dengan dua tombol, sampai gradien biru ke ungu. Teks terasa "AI" karena alasan yang sama di lapis lain: kata besar tanpa angka, paragraf yang panjangnya seragam, penutup yang merangkum tanpa menambah apa pun.
+Desain dan copy pernah digabung dalam satu skill. Sekarang dipisah supaya bisa dipakai sendiri-sendiri. Halaman yang butuh keduanya memasang dua-duanya; masing-masing skill menyebut pembagian kerjanya.
 
-Setiap aturan di sini menuntut satu hal yang sama: elemen atau kalimat harus punya alasan yang bisa diucapkan. Bukan menukar satu default dengan default lain.
-
-## Isi repo
+## Susunan repo
 
 ```
-SKILL.md                  Alur kerja gabungan, daftar terlarang, gate cepat, prompt block
-install.ps1               Pemasang untuk Windows (user atau per project)
-install.sh                Pemasang untuk macOS dan Linux
-references/web-design.md  Aturan desain lengkap + gate skor 12 baris
-references/copywriting.md Aturan copy lengkap + gate skor 14 baris
-references/sumber.md      Asal setiap angka yang dipakai di repo ini
+skills/
+  web-design-anti-ai/
+    SKILL.md            Pintu masuk skill
+    README.md           Penjelasan untuk manusia
+    references/         Aturan lengkap per topik
+  copywriting-anti-ai/
+    SKILL.md
+    README.md
+    references/
+  seo-onpage/
+    SKILL.md
+    README.md
+    references/
+ref/                    Bahan riset lokal, diabaikan git
+install.ps1             Pemasang Windows
+install.sh              Pemasang macOS dan Linux
+LICENSE
 ```
 
-`SKILL.md` adalah pintu masuk. Dua file referensi dibaca sesuai kebutuhan, bukan sekaligus.
+Satu skill satu folder. Nama folder harus sama dengan `name` di frontmatter `SKILL.md`, karena pemasang memakai nama itu dan agent memanggil skill dengan nama itu. Bahan riset lokal boleh disimpan di `ref/` pada akar repo atau di `skills/<nama>/ref/`; keduanya diabaikan git.
 
-## Cara pakai
+## Cara pasang
 
-**Sebagai skill agent.** Jalankan `.\install.ps1` untuk memasang ke `~/.dsh/skills`, yang berlaku di semua project di mesin Anda. Tambahkan `-Claude` untuk Claude Code (`~/.claude/skills`) atau `-Agents` untuk Codex CLI (`~/.agents/skills`). Untuk satu project saja, tambahkan `-Project -Path <folder>`. Di macOS dan Linux, `./install.sh` melakukan hal yang sama dengan opsi `--claude`, `--agents`, `--project`, dan `--path`. Kedua skrip menyalin `SKILL.md` beserta `references/`, lalu memeriksa hash setiap berkas setelah menyalin. Untuk agent lain, letakkan folder ini di direktori skill-nya; isinya mengikuti standar [Agent Skills](https://agentskills.io) dengan frontmatter `name` dan `description` saja, tanpa fitur khusus harness mana pun.
+Tanpa opsi tambahan, pemasang memasang semua skill untuk DSH di level user.
 
-**Sebagai aturan proyek.** Ambil blok di bagian "Prompt block" pada `SKILL.md` dan tempel apa adanya ke `CLAUDE.md`, `.cursorrules`, atau custom instructions. Blok itu merangkum larangan dan angka wajib yang paling sering dilanggar.
+**Semua skill.** Jalankan `.\install.ps1` di Windows atau `./install.sh` di macOS dan Linux. Skrip menyalin setiap folder di `skills/` ke `~/.dsh/skills/<nama>`.
 
-**Sebagai spesifikasi manusia.** Baca `SKILL.md` sampai bagian audit, lalu buka referensi saat butuh angka spesifik: skala tipe, kontras, durasi motion, batas hedge, atau pola kalimat Indonesia.
+**Satu skill saja.** `.\install.ps1 -Skill seo-onpage` atau `./install.sh --skill seo-onpage`. Beberapa nama bisa dipisah koma. Opsi `-List` dan `--list` menampilkan nama yang tersedia.
+
+**Claude Code atau Codex.** Tambah `-Claude` untuk `~/.claude/skills`, atau `-Agents` untuk `~/.agents/skills`. Di macOS dan Linux, `--claude` dan `--agents`.
+
+**Satu project saja.** Tambah `-Project -Path <folder>` atau `--project --path <folder>`. Tanpa `-Path`, pemasangan memakai direktori kerja saat ini.
+
+Kedua skrip menyalin `SKILL.md`, `README.md`, `LICENSE`, dan seluruh isi `references/`, lalu membandingkan hash setiap berkas setelah salin. Folder `ref/` tidak pernah disalin.
+
+Kalau PowerShell menolak skrip yang belum ditandatangani, jalankan lewat proses yang sama dengan `powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1`, lalu tambahkan opsi pemasangan di belakangnya.
+
+## Menambah skill baru
+
+Buat folder `skills/<nama>/` berisi `SKILL.md` dengan frontmatter `name` dan `description`. Isi `name` dengan nama folder. Tambahkan `references/` kalau aturannya panjang, dan `README.md` kalau perlu penjelasan untuk manusia. Pemasang menemukan folder baru tanpa diubah.
+
+```markdown
+---
+name: nama-skill
+description: Pekerjaan yang disasar, plus kapan skill ini tidak dipakai.
+---
+
+# Judul
+```
+
+`description` menentukan apakah agent memilih skill ini tanpa dipanggil. Tulis pekerjaan dan batasnya, bukan daftar fitur.
 
 ## Kompatibilitas harness
-
-Skill ini memakai standar [Agent Skills](https://agentskills.io): sebuah folder dengan `SKILL.md` berfrontmatter `name` dan `description`. Tidak ada `allowed-tools`, `context: fork`, atau injeksi perintah yang cuma dipahami satu harness.
 
 | Harness | Folder yang dibaca | Pasang dengan |
 |---|---|---|
@@ -41,23 +75,8 @@ Skill ini memakai standar [Agent Skills](https://agentskills.io): sebuah folder 
 | Claude Code | `~/.claude/skills/<nama>/`, `<repo>/.claude/skills/` | `-Claude` atau `--claude` |
 | Codex CLI | `~/.agents/skills/<nama>/`, `<repo>/.agents/skills/` | `-Agents` atau `--agents` |
 
-Codex membaca `.agents/skills`, bukan `.codex/skills`. Karena DSH juga membaca `~/.agents/skills`, satu pemasangan di sana melayani DSH dan Codex sekaligus, dengan catatan bahwa skill akan muncul dari dua lokasi kalau Anda juga memasangnya di `~/.dsh/skills`.
-
-## Dua hal yang sering disalahpahami
-
-**Satu ciri bukan bukti.** Ungu dipakai sepertiga situs top. Inter dengan type system yang benar dipakai seperempatnya. Dua angka itu diukur pada 202 situs top, rinciannya di [references/sumber.md](references/sumber.md). Em dash yang dipakai sesekali adalah tanda penulis yang peduli tanda baca. Yang jadi bukti adalah bundel default tanpa satu pun keputusan pengompensasi.
-
-**Aturan ini lantai, bukan plafon.** Kalau sebuah aturan menghalangi keputusan yang lebih baik dan bisa dipertahankan, tulis pengecualiannya di file brand. Jangan melanggarnya diam-diam, dan jangan memakainya untuk menuduh penulis non-native atau proyek yang memang memilih gaya umum.
-
-## Pengecualian yang dicatat
-
-H1 di README ini memakai Title Case karena itu nama proyek di GitHub, bukan heading di dalam dokumen. Aturan sentence case tetap berlaku untuk heading lain.
-
-## Skor
-
-Audit memakai skor 0–2 per baris, makin rendah makin baik, dengan 12 baris untuk desain dan 14 baris untuk copy. Lulus jika skor desain ≤ 6 dari 24, skor copy ≤ 8 dari 28, dan tidak ada satu pun pelanggaran daftar terlarang, sebab skor yang rendah tidak menolong apa pun kalau halaman masih memuat testimoni karangan dan angka yang tidak bisa ditunjuk sumbernya. Alat ini untuk diagnosis, bukan bukti.
+Codex membaca `.agents/skills`, bukan `.codex/skills`. Karena DSH juga membaca `~/.agents/skills`, satu pemasangan di sana melayani DSH dan Codex sekaligus. Kalau Anda juga memasang di `~/.dsh/skills`, skill yang sama muncul dari dua lokasi.
 
 ## Lisensi
 
 MIT. Pakai bebas untuk proyek pribadi maupun komersial: ubah, gabungkan ke aturan sendiri, sebarkan, atau jual. Satu syaratnya hanya menyertakan notice hak cipta yang ada di [LICENSE](LICENSE).
-

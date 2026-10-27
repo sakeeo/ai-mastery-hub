@@ -1,8 +1,9 @@
 # ---------------------------------------------------------------------------
-# Referensi lokal — riset & rules, TIDAK di-push ke repo
-# Folder /ref dan seluruh isinya diabaikan.
+# Bahan riset lokal — TIDAK di-push ke repo
+# Bisa di /ref/ (akar repo) atau di skills/<nama>/ref/
 # ---------------------------------------------------------------------------
 /ref/
+/skills/*/ref/
 
 # ---------------------------------------------------------------------------
 # Dependencies
@@ -10,7 +11,6 @@
 node_modules/
 .pnp
 .pnp.*
-jspm_packages/
 
 # ---------------------------------------------------------------------------
 # Build output

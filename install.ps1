@@ -1,17 +1,25 @@
 <#
 .SYNOPSIS
-Memasang skill web-design-anti-ai ke direktori skill agent.
+Memasang satu atau semua skill dari repo ini ke direktori skill agent.
 
 .DESCRIPTION
-Menyalin SKILL.md, README.md, LICENSE, dan seluruh isi references/ ke direktori
-skill. Target default adalah DSH. Gunakan -Claude untuk Claude Code, atau
--Agents untuk Codex CLI dan agent lain yang membaca standar .agents/skills.
+Setiap folder di skills/ yang berisi SKILL.md dianggap satu skill. Tanpa
+-Skill, semua skill dipasang. Target default adalah DSH. Gunakan -Claude untuk
+Claude Code, atau -Agents untuk Codex CLI dan agent lain yang membaca
+standar .agents/skills.
 
 Tanpa -Project, skill dipasang di level user sehingga berlaku di semua project.
 Dengan -Project, skill dipasang di dalam satu project saja.
 
-Folder ref/ tidak pernah disalin. Folder itu berisi bahan riset lokal dan
-diabaikan oleh git.
+Hanya SKILL.md, README.md, LICENSE, dan references/ yang disalin. Folder ref/
+berisi bahan riset lokal dan tidak pernah disalin.
+
+.PARAMETER Skill
+Nama skill yang dipasang. Bisa lebih dari satu, misalnya -Skill a,b. Default:
+semua skill di skills/. Alias lama: -Name.
+
+.PARAMETER List
+Tampilkan nama skill yang tersedia, lalu keluar.
 
 .PARAMETER Project
 Pasang ke dalam project, bukan di direktori user.
@@ -25,31 +33,30 @@ Target Claude Code (~/.claude/skills atau <project>/.claude/skills).
 .PARAMETER Agents
 Target Codex CLI dan agent lain yang membaca ~/.agents/skills.
 
-.PARAMETER Name
-Nama folder skill tujuan. Default: web-design-anti-ai.
-
 .EXAMPLE
 .\install.ps1
 
-Memasang di ~/.dsh/skills/web-design-anti-ai untuk DSH.
+Memasang semua skill di ~/.dsh/skills untuk DSH.
 
 .EXAMPLE
-.\install.ps1 -Claude
+.\install.ps1 -Skill web-design-anti-ai
 
-Memasang di ~/.claude/skills/web-design-anti-ai untuk Claude Code.
+Memasang satu skill di ~/.dsh/skills untuk DSH.
 
 .EXAMPLE
 .\install.ps1 -Agents -Project -Path D:\DEV\landing-page
 
-Memasang di D:\DEV\landing-page\.agents\skills\web-design-anti-ai.
+Memasang semua skill di D:\DEV\landing-page\.agents\skills.
 #>
 [CmdletBinding()]
 param(
+    [Alias('Name')]
+    [string[]]$Skill,
+    [switch]$List,
     [switch]$Project,
     [switch]$Claude,
     [switch]$Agents,
-    [string]$Path,
-    [string]$Name = 'web-design-anti-ai'
+    [string]$Path
 )
 
 $ErrorActionPreference = 'Stop'
@@ -62,20 +69,65 @@ if ($Path -and -not $Project) {
 }
 
 $source = $PSScriptRoot
-if (-not (Test-Path (Join-Path $source 'SKILL.md'))) {
-    throw "SKILL.md tidak ditemukan di $source. Jalankan skrip ini dari folder repo skill."
+$skillsRoot = Join-Path $source 'skills'
+
+if (-not (Test-Path -LiteralPath $skillsRoot -PathType Container)) {
+    throw "Folder skills tidak ditemukan di $skillsRoot. Jalankan skrip ini dari akar repo."
+}
+
+$available = @(Get-ChildItem -LiteralPath $skillsRoot -Directory | Where-Object {
+    Test-Path -LiteralPath (Join-Path $_.FullName 'SKILL.md') -PathType Leaf
+} | Sort-Object Name)
+
+if ($available.Count -eq 0) {
+    throw "Tidak ada skill di $skillsRoot. Setiap skill butuh SKILL.md di dalam foldernya."
+}
+
+foreach ($dir in $available) {
+    $skillFile = Join-Path $dir.FullName 'SKILL.md'
+    $match = Select-String -LiteralPath $skillFile -Pattern '^name:\s*(.+?)\s*$' | Select-Object -First 1
+    if (-not $match) {
+        throw "Frontmatter 'name' tidak ditemukan di $skillFile."
+    }
+    $declared = $match.Matches[0].Groups[1].Value.Trim().Trim('"').Trim("'")
+    if ($declared -ne $dir.Name) {
+        throw "Frontmatter name '$declared' tidak sama dengan nama folder '$($dir.Name)'."
+    }
+}
+
+if ($List) {
+    Write-Host "Skill di $skillsRoot`:"
+    foreach ($dir in $available) {
+        Write-Host "  $($dir.Name)"
+    }
+    return
+}
+
+$selected = @()
+if ($Skill) {
+    foreach ($name in $Skill) {
+        $found = $available | Where-Object { $_.Name -eq $name }
+        if (-not $found) {
+            throw "Skill '$name' tidak ada. Pilihan: $($available.Name -join ', ')"
+        }
+        $selected += $found
+    }
+    $selected = @($selected | Sort-Object Name -Unique)
+}
+else {
+    $selected = $available
 }
 
 $target = if ($Claude) { 'claude' } elseif ($Agents) { 'agents' } else { 'dsh' }
+$container = switch ($target) {
+    'claude' { '.claude' }
+    'agents' { '.agents' }
+    default { '.dsh' }
+}
 
 if ($Project) {
     $root = if ($Path) { (Resolve-Path -LiteralPath $Path).Path } else { (Get-Location).Path }
-    $container = switch ($target) {
-        'claude' { '.claude' }
-        'agents' { '.agents' }
-        default { '.dsh' }
-    }
-    $dest = Join-Path $root "$container\skills\$Name"
+    $base = Join-Path $root $container
     $scope = "project $target ($root)"
 }
 else {
@@ -86,43 +138,69 @@ else {
             if ($env:DSH_HOME) { $env:DSH_HOME } else { Join-Path $env:USERPROFILE '.dsh' }
         }
     }
-    $dest = Join-Path $base "skills\$Name"
     $scope = "user $target"
 }
 
-$files = @('SKILL.md', 'README.md', 'LICENSE')
-$referenceDir = Join-Path $source 'references'
-if (Test-Path $referenceDir) {
-    $files += Get-ChildItem $referenceDir -Filter '*.md' -File | ForEach-Object {
-        Join-Path 'references' $_.Name
+$skillsDest = Join-Path $base 'skills'
+$totalFiles = 0
+$totalMismatch = 0
+
+foreach ($dir in $selected) {
+    $dest = Join-Path $skillsDest $dir.Name
+    $status = if (Test-Path -LiteralPath $dest) { 'memperbarui' } else { 'memasang' }
+    Write-Host "$status skill '$($dir.Name)' ($scope)"
+    Write-Host "  dari : $($dir.FullName)"
+    Write-Host "  ke   : $dest"
+
+    $files = @()
+    foreach ($name in 'SKILL.md', 'README.md') {
+        if (Test-Path -LiteralPath (Join-Path $dir.FullName $name)) {
+            $files += $name
+        }
     }
-}
-
-$status = if (Test-Path $dest) { 'memperbarui' } else { 'memasang' }
-Write-Host "$status skill '$Name' ($scope)"
-Write-Host "  dari : $source"
-Write-Host "  ke   : $dest"
-
-New-Item -ItemType Directory -Force -Path (Join-Path $dest 'references') | Out-Null
-
-foreach ($file in $files) {
-    $targetFile = Join-Path $dest $file
-    New-Item -ItemType Directory -Force -Path (Split-Path $targetFile) | Out-Null
-    Copy-Item (Join-Path $source $file) $targetFile -Force
-}
-
-$mismatch = 0
-foreach ($file in $files) {
-    $a = (Get-FileHash (Join-Path $source $file) -Algorithm SHA256).Hash
-    $b = (Get-FileHash (Join-Path $dest $file) -Algorithm SHA256).Hash
-    if ($a -ne $b) {
-        Write-Warning "isi berbeda setelah salin: $file"
-        $mismatch++
+    $license = Join-Path $source 'LICENSE'
+    if (Test-Path -LiteralPath $license) {
+        $files += 'LICENSE'
     }
+
+    $referencesSource = Join-Path $dir.FullName 'references'
+    if (Test-Path -LiteralPath $referencesSource -PathType Container) {
+        foreach ($file in Get-ChildItem -LiteralPath $referencesSource -Recurse -File) {
+            $relative = $file.FullName.Substring($referencesSource.Length + 1).Replace('\', '/')
+            $files += 'references/' + $relative
+        }
+    }
+
+    New-Item -ItemType Directory -Force -Path $dest | Out-Null
+
+    $mismatch = 0
+    foreach ($relative in $files) {
+        $sourceFile = if ($relative -eq 'LICENSE') { $license } else { Join-Path $dir.FullName $relative }
+        $targetFile = Join-Path $dest $relative
+        $targetDir = Split-Path -Parent $targetFile
+        if ($targetDir) {
+            New-Item -ItemType Directory -Force -Path $targetDir | Out-Null
+        }
+        Copy-Item -LiteralPath $sourceFile -Destination $targetFile -Force
+
+        $sourceHash = (Get-FileHash -LiteralPath $sourceFile -Algorithm SHA256).Hash
+        $targetHash = (Get-FileHash -LiteralPath $targetFile -Algorithm SHA256).Hash
+        if ($sourceHash -ne $targetHash) {
+            Write-Warning "isi berbeda setelah salin: $relative"
+            $mismatch++
+        }
+    }
+
+    Write-Host "  $($files.Count) berkas disalin, $($files.Count - $mismatch) identik."
+    $totalFiles += $files.Count
+    $totalMismatch += $mismatch
+    Write-Host ''
 }
 
-Write-Host ""
-Write-Host "$($files.Count) berkas disalin, $($files.Count - $mismatch) identik."
-if ($mismatch -gt 0) { exit 1 }
+Write-Host "$($selected.Count) skill diproses ($totalFiles berkas) di $skillsDest."
+if ($totalMismatch -gt 0) {
+    Write-Host "$totalMismatch berkas berbeda setelah salin." -ForegroundColor Red
+    exit 1
+}
 
-Write-Host "Panggil dengan namanya di chat, atau biarkan agent memilihnya saat tugasnya menyentuh desain dan copy."
+Write-Host 'Panggil dengan namanya di chat, atau biarkan agent memilihnya saat tugasnya cocok.'

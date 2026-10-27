@@ -6,7 +6,7 @@
 - **Penulis** → §0 dan §10 dulu, sisanya referensi.
 - **Coding agent / LLM** → tempel §12 ke `CLAUDE.md`, system prompt, atau custom instructions.
 
-**Posisi dokumen:** ini rincian aturan copy dari skill [`web-design-anti-ai`](../SKILL.md). Untuk alur kerja gabungan desain + copy, baca `SKILL.md` lebih dulu.
+**Posisi dokumen:** ini rincian aturan copy dari skill [`copywriting-anti-ai`](../SKILL.md). Aturan desain ada di skill `web-design-anti-ai`.
 
 **Sifat dokumen:** ini menetapkan **lantai**, bukan gaya. Tujuannya menghapus default mesin, bukan menyeragamkan suara. Kalau sebuah aturan menghalangi kalimat yang lebih baik dan bisa dipertahankan, tulis pengecualiannya — jangan diam-diam melanggar.
 

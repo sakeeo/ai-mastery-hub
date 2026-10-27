@@ -3,10 +3,10 @@
 **Versi 1.0** · Turunan riset ciri-ciri web design buatan AI (taxonomy 27 tells, 3,2 juta post Reddit, validasi 202 situs). Asal setiap angka ada di [sumber.md](sumber.md).
 
 **Cara pakai:**
-- **Manusia** → ini spec desain. Baca §0 dan §13 dulu, sisanya referensi.
-- **Coding agent** → tempel §16 ke `CLAUDE.md` / `.cursorrules` / custom instructions v0 & Lovable.
+- **Manusia** → ini spec desain. Baca §0 dan §11 dulu, sisanya referensi.
+- **Coding agent** → tempel §14 ke `CLAUDE.md` / `.cursorrules` / custom instructions v0 & Lovable.
 
-**Posisi dokumen:** ini rincian aturan desain dari skill [`web-design-anti-ai`](../SKILL.md). Untuk alur kerja gabungan desain + copy, baca `SKILL.md` lebih dulu.
+**Posisi dokumen:** ini rincian aturan desain dari skill [`web-design-anti-ai`](../SKILL.md). Aturan copy dan bukti ada di skill `copywriting-anti-ai`.
 
 **Sifat dokumen:** rules ini menetapkan **lantai**, bukan plafon. Tujuannya menghapus default mesin, bukan menyeragamkan gaya. Kalau sebuah aturan menghalangi keputusan yang lebih baik dan bisa dipertahankan, tulis pengecualiannya di file brand — jangan diam-diam melanggarnya.
 
@@ -158,41 +158,7 @@
 
 ---
 
-## 9. Copy (C)
-
-**C1 — Headline = klaim spesifik yang bisa dipertahankan.** Dilarang: "Build the future of ___", "Supercharge your ___", "Seamless", "Next-gen", "Unlock", "Transform".
-
-**C2 — CTA menyebut hasil.** "Lihat harga untuk tim", "Coba dengan data Anda", "Jadwalkan 15 menit dengan engineer" — bukan "Get Started" atau "Learn More" sendirian.
-
-**C3 — Buzzword density < 2%.** Setiap kata besar harus punya angka, bukti, atau konsekuensi konkret di sebelahnya.
-
-**C4 — Tidak ada lorem ipsum.** Tidak ada teks placeholder di build apa pun, termasuk draft.
-
-**C5 — Jangan labeli fitur "AI".** Sebut fungsinya ("ringkas", "deteksi duplikat"); nama model hanya di halaman pengaturan.
-
-**C6 — Satu brand voice tertulis.** Nada, panjang kalimat, dan kosakata yang dilarang didokumentasikan, bukan diimprovisasi per halaman.
-
----
-
-## 10. Bukti & konten (B)
-
-**B1 — Semua angka bisa diverifikasi.** Ambil dari codebase/produk. Angka bulat ("10.000+", "99%") tanpa sumber dilarang.
-
-**B2 — Testimoni hanya yang nyata.** Nama, peran, perusahaan, izin. Kalau belum ada — kosongkan section-nya.
-
-**B3 — Logo klien hanya klien nyata.**
-
-**B4 — Pricing hanya kalau ada monetisasi.** Kalau tidak, ganti dengan cara pakai/deploy.
-
-**B5 — Tidak ada urgency palsu.** Countdown, "limited seats", "early access" tanpa waitlist adalah kebohongan, bukan copywriting.
-
-**B6 — Tidak ada comparison table** melawan kompetitor yang belum benar-benar dicek.
-
-**B7 — Bagian kosong lebih baik daripada bagian palsu.** Ini aturan keras: satu testimoni karangan merusak seluruh kredibilitas halaman.
-
----
-
-## 11. Gambar & ikon (G)
+## 9. Gambar & ikon (G)
 
 **G1 — Satu set ikon.** Satu library, satu stroke width, satu gaya (outline **atau** filled). Mencampur `fa-`, `bi-`, `material-` adalah tell.
 
@@ -210,7 +176,7 @@
 
 ---
 
-## 12. Kode & aksesibilitas (K)
+## 10. Kode & aksesibilitas (K)
 
 **K1 — Semantic HTML.** Heading berurutan tanpa lompat, landmark (`header`/`nav`/`main`/`footer`), `label` untuk setiap input.
 
@@ -230,7 +196,7 @@
 
 ---
 
-## 13. Daftar terlarang (hard no)
+## 11. Daftar terlarang (hard no)
 
 Tidak ada pengecualian tanpa catatan tertulis di file brand.
 
@@ -242,25 +208,24 @@ Tidak ada pengecualian tanpa catatan tertulis di file brand.
 | Surface | `shadow-lg` di semua container; nested card; `backdrop-blur` di kartu biasa |
 | Motion | Fade-in seragam untuk semua elemen; `transition: all`; animasi tanpa `prefers-reduced-motion` |
 | Ikon | Sparkles/wand/bot/brain; emoji sebagai ikon; campur gaya ikon |
-| Copy | "Build the future of ___"; "Get Started" sendirian; "AI-powered" di UI; lorem ipsum |
-| Konten | Testimoni karangan; logo klien palsu; angka bulat tanpa sumber; urgency palsu |
+| Gambar | Blob/aurora tanpa isi; gambar AI dengan teks rusak di hero/testimoni; stok metafora korporat |
 | Kode | Hex hardcoded di komponen; data dummy di produksi; import mati |
 
 ---
 
-## 14. Prosedur kerja
+## 12. Prosedur kerja
 
 1. **Brief + refusal.** Tulis tujuan halaman, audiens, dan 5 hal yang brand tidak boleh terlihat (F3).
 2. **Tiga keputusan.** Pilih 3 owned decisions, minimal satu yang mahal ditiru (F2).
 3. **Token dulu.** Bangun file token sebelum komponen (F1).
 4. **Bangun.** Setiap komponen wajib punya 6 state (I1) dan spacing dari skala (P1).
-5. **Audit.** Jalankan §15, perbaiki semua item yang gagal, ulangi sampai lulus.
+5. **Audit.** Jalankan §13, perbaiki semua item yang gagal, ulangi sampai lulus.
 
 Kalau memakai coding agent: **generate → audit → fix → audit ulang.** Jangan pernah rilis hasil generate pertama.
 
 ---
 
-## 15. Gate skor
+## 13. Gate skor
 
 Skor 0–2 per baris (0 = aturan terpenuhi sepenuhnya, 2 = default mesin). Total 0–24, **makin rendah makin baik**.
 
@@ -275,15 +240,15 @@ Skor 0–2 per baris (0 = aturan terpenuhi sepenuhnya, 2 = default mesin). Total
 | 7 | Elevasi | ≤ 3 level, mayoritas flat | shadow di semua |
 | 8 | Spacing | skala 4/8 + variasi | satu padding di semua |
 | 9 | State | 6 state lengkap | tidak ada hover/focus |
-| 10 | Copy | klaim spesifik | buzzword + CTA generik |
-| 11 | Bukti | nyata & terverifikasi | palsu / kosong tanpa label |
+| 10 | Gambar | produk nyata, ikon satu set | blob/aurora, ikon campur, emoji |
+| 11 | Motion | bertujuan, reduced-motion | fade-in seragam |
 | 12 | Kode | token, komponen bersih | hardcoded, data dummy |
 
-**Lulus jika total ≤ 6 dan tidak ada satu pun pelanggaran §13.** Skor 7–14 = default kit, bisa AI bisa manusia. 15–24 = tanda tangan AI-default kuat.
+**Lulus jika total ≤ 6 dan tidak ada satu pun pelanggaran §11.** Skor 7–14 = default kit, bisa AI bisa manusia. 15–24 = tanda tangan AI-default kuat.
 
 ---
 
-## 16. Prompt block untuk coding agent
+## 14. Prompt block untuk coding agent
 
 Tempel apa adanya ke `CLAUDE.md`, `.cursorrules`, atau custom instructions.
 
@@ -307,9 +272,8 @@ DILARANG (tanpa pengecualian):
 - Fade-in seragam untuk semua elemen; transition: all.
 - Emoji sebagai ikon; ikon sparkles/wand/bot/brain/cpu.
 - outline: none tanpa focus ring pengganti.
-- "Build the future of ___", "Get Started" sendirian, "AI-powered" di UI.
-- Testimoni, logo klien, angka, atau pricing yang dikarang. Kalau data belum
-  ada, kosongkan section-nya dan beri label.
+- Mengisi section bukti dengan testimoni, logo, angka, atau pricing karangan.
+  Kosongkan section-nya.
 
 WAJIB:
 - Type scale 4–6 step (acuan 64/48/32/16), display line-height ~1.1 dengan
@@ -325,7 +289,6 @@ WAJIB:
 - Dark mode near-black bertint (#0b0f19 / #111 / #18181b), bukan #000.
 - Kontras body ≥ 4.5:1, target sentuh ≥ 44px, heading berurutan, alt bermakna.
 - Satu set ikon, satu stroke width.
-- CTA menyebut hasil konkret; headline berupa klaim yang bisa dipertahankan.
 
 SETELAH CODING:
 - Audit terhadap daftar di atas. Laporkan setiap pelanggaran dan perbaiki.
@@ -334,7 +297,7 @@ SETELAH CODING:
 
 ---
 
-## 17. Yang bukan pelanggaran
+## 15. Yang bukan pelanggaran
 
 Supaya tidak overcorrect — semua ini dipakai situs top dan **bukan** tell:
 
